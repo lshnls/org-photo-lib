@@ -4,7 +4,7 @@ Copying or moving photos and video files in organized directories in chronologic
 
 Purpose: Copy/Move image and video files in a folder based on date photo taken (from EXIF metadata) or video creation date.
 
-Usage: python.exe org-photo-lib.py <copy|move> <input-folder> <output-folder>
+Usage: python.exe org-photo-lib.py <copy|move> \<input-folder> \<output-folder>
   - input-folder = the directory containing the image files to be copied/movied
   - output-folder =  the directory to which they images will be copied/movied
 
