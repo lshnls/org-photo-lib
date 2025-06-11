@@ -1,15 +1,15 @@
 ## Organize you photo library
 #Copying or moving photos and video files in organized directories in chronological order
-
+#
 #Purpose: Copy/Move image and video files in a folder based on date photo taken (from EXIF metadata) or video creation date.
-
+#
 #Usage: python.exe org-photo-lib.py <copy|move> \<input-folder> \<output-folder>
 #  - input-folder = the directory containing the image files to be copied/movied
 #  - output-folder =  the directory to which they images will be copied/movied
-
+#
 # Examples: python.exe rename.py copy /home/Images/src /home/images/dest
 #           python.exe rename.py move /home/Images/src /home/images/dest
-
+#
 ## Behavior:
 #  - Given a photo named "Photo-May-001.jpg"  
 #  - with EXIF date taken of "5/1/2025 12:01:00 PM"  
@@ -45,7 +45,6 @@ files_moved = 0
 files_copied = 0
 
 def copy_file(exec_command,filefrom,fileto):
-#    n=1
     global files_deleted
     global files_moved
     global files_copied
@@ -55,12 +54,12 @@ def copy_file(exec_command,filefrom,fileto):
             filesize=os.path.getsize(filefrom)
             if filesize == os.path.getsize(fileto):
                 if exec_command == "move":
-                    print("Files have some sizes ",str(filesize),": "+fileto," ...Remove source file")
+                    print("Files have some sizes",str(filesize)," "+fileto,"...remove source")
                     os.remove(filefrom)
                     files_deleted = files_deleted + 1
                     return 1
                 elif exec_command == "copy":
-                    print("Files have some sizes ",str(filesize),": "+fileto," ...Ignore")
+                    print("Files have some sizes",str(filesize)," "+fileto,"...ignore")
                     return 1
             else:
                 print("File exist:"+fileto)
@@ -78,7 +77,7 @@ def copy_file(exec_command,filefrom,fileto):
             shutil.move(filefrom, fileto)
             files_moved = files_moved + 1
     else:
-           print(f"File '{filename}' already named correctly")
+           print(f"File '{fileto}' already named correctly")
     return 0
 
 # Function to get the date from image EXIF data
@@ -146,7 +145,8 @@ def do_files(exec_command,input_folder,output_folder):
                     continue
 
                 # If a date was found, work with file
-                if date:
+                # If a date was after 2000, work with file
+                if date and date.year > 2000:
                     new_name = date.strftime("%Y%m%d-%H%M%S")
                     new_fold=output_folder+date.strftime("/%Y/%Y-%m")
                     new_filepath = os.path.join(new_fold+'/', new_name + ext)
@@ -155,13 +155,13 @@ def do_files(exec_command,input_folder,output_folder):
                     copy_file(exec_command,filepath,new_filepath)
 
                 else:
-                    print(f"No date metadata found for '{filename}'")
+                    print(f"No true date metadata found for '{filename}'")
                     new_filepath = os.path.join(output_folder+"/no-meta/"+cutdir+"/"+filename)
 
                     os.makedirs(output_folder+"/no-meta/"+cutdir,exist_ok=True)
                     copy_file(exec_command,filepath,new_filepath)
             else:
-                print(f"Unknown format: "+filename)
+                print(f"Unknown format:'{filename}'")
                 os.makedirs(output_folder+"/unknown-format/"+cutdir,exist_ok=True)
                 new_filepath = os.path.join(output_folder+"/unknown-format/"+cutdir+'/'+filename)
                 copy_file(exec_command,filepath,new_filepath)
