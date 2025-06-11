@@ -39,10 +39,15 @@ exec_commands = ["copy", "move"]
 image_extensions = [".jpg", ".jpeg", ".png",".thm"]
 video_extensions = [".mp4", ".mov", ".avi"]
 all_extensions = image_extensions + video_extensions
-
+files_deleted = 0
+files_moved = 0
+files_copied = 0
 
 def copy_file(exec_command,filefrom,fileto):
 #    n=1
+    global files_deleted
+    global files_moved
+    global files_copied
     if fileto != filefrom:
 
         while os.path.exists(fileto):
@@ -51,6 +56,7 @@ def copy_file(exec_command,filefrom,fileto):
                 if exec_command == "move":
                     print("File exist and have some size ",str(filesize),": "+fileto," ...Remove source file")
                     os.remove(filefrom)
+                    files_deleted = files_deleted + 1
                     return 1
                 else:
                      print("File exist and have some size ",str(filesize),": "+fileto," ...Ignore")
@@ -66,8 +72,10 @@ def copy_file(exec_command,filefrom,fileto):
 
         if exec_command == "copy":
             shutil.copy(filefrom, fileto)
+            files_copied = files_copied + 1
         if exec_command == "move":
             shutil.move(filefrom, fileto)
+            files_moved = files_moved + 1
     else:
            print(f"File '{filename}' already named correctly")
     return 0
@@ -150,4 +158,5 @@ if __name__ == "__main__":
     else:
         locale.setlocale(locale.LC_TIME, '')
         do_files(sys.argv[1],sys.argv[2],sys.argv[3])
+        print("Files copied:",files_copied," moved:", files_moved," deleted:",files_deleted)
 
