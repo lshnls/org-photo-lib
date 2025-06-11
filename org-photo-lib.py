@@ -29,8 +29,8 @@ import locale
 import os
 import sys
 import shutil
-import random
-import filecmp
+#import random
+#import filecmp
 # import PIL
 from datetime import datetime
 #from turtle import goto
