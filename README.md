@@ -1,4 +1,6 @@
-# Copy/Movie Images and Videos with Date Taken from EXIF Creation Date
+# Organize you photo library
+
+Copying or moving photos and video files in organized directories in chronological order
 
 Purpose: Copy/Move image and video files in a folder based on date photo taken (from EXIF metadata) or video creation date.
 
