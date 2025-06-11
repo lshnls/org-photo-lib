@@ -1,4 +1,4 @@
-# Copy/Movie Images and Videos with Date Taken or Creation Date
+# Copy/Movie Images and Videos with Date Taken from EXIF Creation Date
 
 Purpose: Copy/Move image and video files in a folder based on date photo taken (from EXIF metadata) or video creation date.
 
