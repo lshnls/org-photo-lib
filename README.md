@@ -15,7 +15,7 @@ Usage: python.exe rename.py input-folder output-folder
   - Given a photo named "Photo-May-001.jpg"  
   - with EXIF date taken of "5/1/2025 12:01:00 PM"  
   - when you run this script on its parent folder
-  - then it will be copy/move to "/<output-folder>/2025/2025-05/20250501-120100.jpg"
+  - then it will be copy/move to "output-folder/2025/2025-05/20250501-120100.jpg"
 ## Notes:
    - For safety, please make a backup of your photos before running this script
    - Currently only designed to work with .jpg, .jpeg, .png, mp4, .mov, and .avi files
