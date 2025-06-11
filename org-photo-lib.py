@@ -37,8 +37,9 @@ from hachoir.parser import createParser
 # Set list of valid commands and file extensions for images and videos
 exec_commands = ["copy", "move"]
 image_extensions = [".jpg", ".jpeg", ".png",".thm"]
+cr2_extensions = [".cr2"]
 video_extensions = [".mp4", ".mov", ".avi"]
-all_extensions = image_extensions + video_extensions
+all_extensions = image_extensions + video_extensions + cr2_extensions
 files_deleted = 0
 files_moved = 0
 files_copied = 0
@@ -54,12 +55,13 @@ def copy_file(exec_command,filefrom,fileto):
             filesize=os.path.getsize(filefrom)
             if filesize == os.path.getsize(fileto):
                 if exec_command == "move":
-                    print("File exist and have some size ",str(filesize),": "+fileto," ...Remove source file")
+                    print("Files have some sizes ",str(filesize),": "+fileto," ...Remove source file")
                     os.remove(filefrom)
                     files_deleted = files_deleted + 1
                     return 1
-                else:
-                     print("File exist and have some size ",str(filesize),": "+fileto," ...Ignore")
+                elif exec_command == "copy":
+                    print("Files have some sizes ",str(filesize),": "+fileto," ...Ignore")
+                    return 1
             else:
                 print("File exist:"+fileto)
                 filename=os.path.splitext(os.path.basename(fileto))[0]
@@ -68,7 +70,6 @@ def copy_file(exec_command,filefrom,fileto):
 #                filename = filename + '#' + str(random.randrange(0, 100))
                 #filename1 = filename + '(' + str(n) + ')'
                 fileto = os.path.join(dir+'/', filename + '+' + ext)
-
 
         if exec_command == "copy":
             shutil.copy(filefrom, fileto)
@@ -92,6 +93,21 @@ def get_image_date(filepath):
                 return datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
     except Exception as e:
         print(f"Error retrieving image date: {e}")
+    return None
+
+# Function to get the date from Canon raw CR2 image EXIF data
+def get_cr2_date(filepath):
+    try:
+        img = Image.open(filepath)
+        exif_data = img.getexif()
+        if exif_data:
+            # EXIF DateTimeOriginal tag
+            date_str = exif_data.get(306)
+            if date_str:
+                #print(datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S"))
+                return datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
+    except Exception as e:
+        print(f"Error retrieving cr2 date: {e}")
     return None
 
 # Function to get the date from video metadata
@@ -124,6 +140,8 @@ def do_files(exec_command,input_folder,output_folder):
                     date = get_image_date(filepath)
                 elif ext in video_extensions:
                     date = get_video_date(filepath)
+                elif ext in cr2_extensions:
+                    date = get_cr2_date(filepath)
                 else:
                     continue
 
